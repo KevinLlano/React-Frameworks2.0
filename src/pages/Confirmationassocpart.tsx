@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-export default function ConfirmationAssocPart() {
+const ConfirmationAssocPart: React.FC = () => {
   useEffect(() => {
     // Redirect to /mainscreen after component renders
     window.location.href = '/mainscreen';
@@ -13,3 +13,7 @@ export default function ConfirmationAssocPart() {
     </div>
   );
 }
+
+export default ConfirmationAssocPart;
+// This component is responsible for confirming the association of a part with a product.
+// It uses the useEffect hook to redirect the user to the main screen after the component mounts.

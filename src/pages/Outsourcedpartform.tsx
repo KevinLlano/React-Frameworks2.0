@@ -1,14 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, ChangeEvent, FormEvent } from 'react';
 
-export default function OutsourcedPartForm() {
-  const [outsourcedPart, setOutsourcedPart] = useState({
+interface OutsourcedPart {
+  id: string;
+  companyName: string;
+  name: string;
+  price: string;
+}
+
+const OutsourcedPartForm: React.FC = () => {
+  const [outsourcedPart, setOutsourcedPart] = useState<OutsourcedPart>({
     id: '',
     companyName: '',
     name: '',
     price: ''
   });
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
     setOutsourcedPart((prevState) => ({
       ...prevState,
@@ -16,9 +23,8 @@ export default function OutsourcedPartForm() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent): void => {
     e.preventDefault();
-    // Handle form submission (send data to API or handle it as needed)
     console.log(outsourcedPart);
   };
 
@@ -26,7 +32,6 @@ export default function OutsourcedPartForm() {
     <div className="outsourced-part-form">
       <h1>Outsourced Part Detail</h1>
       <form onSubmit={handleSubmit}>
-        {/* Hidden ID Field */}
         <input
           type="hidden"
           name="id"
@@ -34,7 +39,6 @@ export default function OutsourcedPartForm() {
           onChange={handleChange}
         />
         
-        {/* Part Name */}
         <div>
           <label htmlFor="name">Part Name:</label>
           <input
@@ -48,7 +52,6 @@ export default function OutsourcedPartForm() {
           />
         </div>
 
-        {/* Part Price */}
         <div>
           <label htmlFor="price">Price:</label>
           <input
@@ -62,7 +65,6 @@ export default function OutsourcedPartForm() {
           />
         </div>
 
-        {/* Company Name */}
         <div>
           <label htmlFor="companyName">Company Name:</label>
           <input
@@ -77,12 +79,14 @@ export default function OutsourcedPartForm() {
           />
         </div>
 
-        {/* Submit Button */}
         <button type="submit">Save Outsourced Part</button>
       </form>
 
-      {/* Link to Main Screen */}
       <a href="http://localhost:8080/">Link to Main Screen</a>
     </div>
   );
-}
+};
+
+export default OutsourcedPartForm;
+// This code defines a React functional component for an Outsourced Part Form. It uses TypeScript for type safety and includes state management with hooks. The form captures the part's name, price, and company name, and handles form submission by logging the data to the console. The component also includes a link back to the main screen.
+

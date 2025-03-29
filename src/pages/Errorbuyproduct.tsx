@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function ErrorBuyProduct() {
+const ErrorBuyProduct: React.FC = () => {
   return (
     <div className="error-buy-product">
       <h1>Purchase has failed</h1>
@@ -9,3 +9,7 @@ export default function ErrorBuyProduct() {
     </div>
   );
 }
+
+export default ErrorBuyProduct;
+// This component is responsible for displaying an error message when a purchase fails.
+// It provides a link to return to the main screen.

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-export default function ConfirmationAddProduct() {
+const ConfirmationAddProduct: React.FC = () => {
   useEffect(() => {
     // Redirect to /mainscreen after the component renders
     window.location.href = '/mainscreen';
@@ -13,3 +13,5 @@ export default function ConfirmationAddProduct() {
     </div>
   );
 }
+
+export default ConfirmationAddProduct;

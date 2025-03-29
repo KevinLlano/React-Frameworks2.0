@@ -16,14 +16,32 @@ import PartForm from './pages/Patform';
 import ProductForm from './pages/Productform';
 import SaveProductScreen from './pages/Savedproductscreen';
 
+interface DataType {
+  id: number;
+  name: string;
+}
 
-function App() {
-  const [data, setData] = useState([]);
+const App: React.FC = () => {
+  const [data, setData] = useState<DataType[]>([]);
+
+  // State for PartForm props
+  const [inv, setInv] = useState<number>(0);
+  const [minInventory, setMinInventory] = useState<number>(0);
+  const [maxInventory, setMaxInventory] = useState<number>(0);
+  const [errorMessage, setErrorMessage] = useState<string>('');
+
+  // Handle change for input fields
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>, field: string) => {
+    const value = parseInt(e.target.value);
+    if (field === 'inv') setInv(value);
+    if (field === 'minInventory') setMinInventory(value);
+    if (field === 'maxInventory') setMaxInventory(value);
+  };
 
   useEffect(() => {
     fetch('http://localhost:8080/mainscreen')
       .then((response) => response.json())
-      .then((data) => {
+      .then((data: DataType[]) => {
         setData(data);
         console.log(data);
       })
@@ -33,7 +51,7 @@ function App() {
   return (
     <div className="App">
       <Routes>
-      <Route path="/" element={<Mainscreen />} />
+        <Route path="/" element={<Mainscreen />} />
         <Route path="/about" element={<About />} />
         <Route path="/confirmationaddpart" element={<ConfirmationAddPart />} />
         <Route path="/confirmationassocpart" element={<ConfirmationAssocPart />} />
@@ -45,13 +63,25 @@ function App() {
         <Route path="/mainscreen" element={<Mainscreen />} />
         <Route path="/showFormAddInPart" element={<InhousePartForm />} />
         <Route path="/errorBuyProduct" element={<ErrorBuyProduct />} />
-
         <Route path="/negativeerror" element={<NegativeError />} />
         <Route path="/showFormAddOutPart" element={<OutsourcedPartForm />} />
-        <Route path="/partform" element={<PartForm />} />
+        
+        {/* Pass the required props to PartForm */}
+        <Route 
+          path="/partform" 
+          element={
+            <PartForm 
+              inv={inv} 
+              minInventory={minInventory} 
+              maxInventory={maxInventory} 
+              errorMessage={errorMessage} 
+              handleChange={handleChange}
+            />
+          } 
+        />
+
         <Route path="/showFormAddProduct" element={<ProductForm />} />
         <Route path="/saveproductscreen" element={<SaveProductScreen />} />
-        {/* Add more routes here as needed */}
       </Routes>
     </div>
   );

@@ -1,5 +1,12 @@
 import React, { useState } from 'react';
 
+interface Product {
+  id: string;
+  name: string;
+  price: string;
+  inv: string;
+}
+
 function ProductForm() {
   const [product, setProduct] = useState({
     id: '',
@@ -7,9 +14,9 @@ function ProductForm() {
     price: '',
     inv: '',
   });
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState<string>(''); // explicit put string type
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setProduct((prevProduct) => ({
       ...prevProduct,
@@ -17,11 +24,23 @@ function ProductForm() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Form validation: Check if any field is empty
+    if (!product.name || !product.price || !product.inv) {
+      setErrorMessage('All fields are required!');
+      return;
+    }
+
+    // Reset error message if everything is filled
+    setErrorMessage('');
+
     // Add form submission logic here
-    // If there's an error, setErrorMessage('Your error message');
+    // Example: Submit the form data to an API or process it further
+    console.log('Form submitted:', product);
   };
+  
 
   return (
     <div>

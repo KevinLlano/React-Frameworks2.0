@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
 
-export default function ConfirmationDeleteProduct() {
+const ConfirmationDeleteProduct: React.FC = () => {
   useEffect(() => {
-    // Redirect to /mainscreen after component renders
     window.location.href = '/mainscreen';
   }, []);
 
@@ -13,3 +12,7 @@ export default function ConfirmationDeleteProduct() {
     </div>
   );
 }
+
+export default ConfirmationDeleteProduct;
+// This component is responsible for confirming the deletion of a product.
+// It uses the useEffect hook to redirect the user to the main screen after the component mounts.

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-export default function ConfirmationBuyProduct() {
+const ConfirmationBuyProduct: React.FC = () => {
   useEffect(() => {
     // Redirect to /mainscreen after component renders
     window.location.href = '/mainscreen';
@@ -15,3 +15,7 @@ export default function ConfirmationBuyProduct() {
     </div>
   );
 }
+
+export default ConfirmationBuyProduct;
+// This component is responsible for confirming the purchase of a product.
+// It uses the useEffect hook to redirect the user to the main screen after the component mounts.

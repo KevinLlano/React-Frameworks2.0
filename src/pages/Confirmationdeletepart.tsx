@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-export default function ConfirmationDeletePart() {
+const ConfirmationDeletePart: React.FC = () => {
   useEffect(() => {
     // Redirect to /mainscreen after component renders
     window.location.href = '/mainscreen';
@@ -13,3 +13,7 @@ export default function ConfirmationDeletePart() {
     </div>
   );
 }
+
+export default ConfirmationDeletePart;
+// This component will redirect to the main screen after a part is deleted.
+// It uses the useEffect hook to perform the redirection when the component mounts.

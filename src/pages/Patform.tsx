@@ -1,6 +1,14 @@
 import React from 'react';
 
-function PartForm({ inv, minInventory, maxInventory, errorMessage, handleChange }) {
+interface PartFormProps {
+  inv: number;
+  minInventory: number;
+  maxInventory: number;
+  errorMessage?: string;
+  handleChange: (e: React.ChangeEvent<HTMLInputElement>, field: string) => void;
+}
+
+const PartForm: React.FC<PartFormProps> = ({ inv, minInventory, maxInventory, errorMessage, handleChange }) => {
   return (
     <div className="part-form">
       <div>
