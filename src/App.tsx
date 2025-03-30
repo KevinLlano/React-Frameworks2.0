@@ -39,14 +39,14 @@ const App: React.FC = () => {
   };
 
   useEffect(() => {
-    fetch('http://localhost:8080/mainscreen')
+    fetch('http://localhost:8080/api/mainscreen') // Updated to match the backend
       .then((response) => response.json())
-      .then((data: DataType[]) => {
-        setData(data);
-        console.log(data);
+      .then((data) => {
+        setData(data); 
       })
-      .catch((error) => console.error('Error fetching data:', error)); // Handle fetch errors
+      .catch((error) => console.error('Error fetching data:', error));
   }, []);
+  
 
   return (
     <div className="App">
