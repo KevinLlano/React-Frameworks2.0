@@ -1,74 +1,83 @@
 import React, { FC, useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import axios from "axios";
 
 interface Item {
+  id: number;
   name: string;
   price: number;
   inv: number;
 }
 
+const initialParts: Item[] = [
+  { id: 1, name: "Engine V8", price: 2500.0, inv: 5 },
+  { id: 2, name: "All-Season Tire", price: 150.0, inv: 20 },
+  { id: 3, name: "Brake Pads", price: 75.0, inv: 30 },
+  { id: 4, name: "12V Battery", price: 120.0, inv: 15 },
+  { id: 5, name: "Spark Plugs", price: 10.0, inv: 100 },
+];
+
+const initialProducts: Item[] = [
+  { id: 1, name: "Mustang GT", price: 35000.0, inv: 2 },
+  { id: 2, name: "Camaro SS", price: 37000.0, inv: 3 },
+  { id: 3, name: "Charger R/T", price: 32000.0, inv: 1 },
+  { id: 4, name: "Corvette Z06", price: 75000.0, inv: 1 },
+  { id: 5, name: "Tesla Model S", price: 80000.0, inv: 2 },
+];
+
 const Mainscreen: FC = () => {
-  // State for parts and products
-  const [parts, setParts] = useState<Item[]>([]);
-  const [products, setProducts] = useState<Item[]>([]);
+  const [parts, setParts] = useState<Item[]>(initialParts);
+  const [products, setProducts] = useState<Item[]>(initialProducts);
 
   useEffect(() => {
-    setParts([
-      { name: "Engine V8", price: 2500.0, inv: 5 },
-      { name: "All-Season Tire", price: 150.0, inv: 20 },
-      { name: "Brake Pads", price: 75.0, inv: 30 },
-      { name: "12V Battery", price: 120.0, inv: 15 },
-      { name: "Spark Plugs", price: 10.0, inv: 100 },
-    ]);
+    axios.get("/api/parts")
+      .then((res) => {
+        if (Array.isArray(res.data) && res.data.length > 0) {
+          setParts(res.data);
+        }
+      })
+      .catch(console.error);
 
-    setProducts([
-      { name: "Mustang GT", price: 35000.0, inv: 2 },
-      { name: "Camaro SS", price: 37000.0, inv: 3 },
-      { name: "Charger R/T", price: 32000.0, inv: 1 },
-      { name: "Corvette Z06", price: 75000.0, inv: 1 },
-      { name: "Tesla Model S", price: 80000.0, inv: 2 },
-    ]);
+    axios.get("/api/products")
+      .then((res) => {
+        if (Array.isArray(res.data) && res.data.length > 0) {
+          setProducts(res.data);
+        }
+      })
+      .catch(console.error);
   }, []);
 
+  // Handler functions remain unchanged
+  const handleUpdatePart = (id: number) => {
+    window.location.href = `/showPartFormForUpdate/${id}`;
+  };
+
+  const handleDeletePart = async (id: number) => {
+    await axios.delete(`/deletepart/${id}`);
+    setParts(parts.filter((part) => part.id !== id));
+  };
+
+  const handleBuyProduct = async (id: number) => {
+    await axios.post(`/buyProduct/${id}`);
+    alert("Product purchased!");
+  };
+
+  const handleUpdateProduct = (id: number) => {
+    window.location.href = `/showProductFormForUpdate/${id}`;
+  };
+
+  const handleDeleteProduct = async (id: number) => {
+    await axios.delete(`/deleteproduct/${id}`);
+    setProducts(products.filter((product) => product.id !== id));
+  };
+
+  // Full JSX implementation
   return (
     <div className="container">
       <h1>Car Supply Shop</h1>
-      <hr />
+
       <h2>Car Parts</h2>
-
-      {/* Search form */}
-      <form action="/mainscreen">
-        Filter:{" "}
-        <input
-          type="text"
-          name="partkeyword"
-          id="partkeyword"
-          size={50}
-          required
-        />
-        &nbsp;
-        <input type="submit" value="Search" />
-        &nbsp;
-        <input
-          type="button"
-          value="Clear"
-          id="btnClearPart"
-          onClick={() => window.location.reload()}
-        />
-      </form>
-      <br />
-
-      {/* Add Inhouse Part Button */}
-      <Link to="/showFormAddInPart" className="btn btn-primary btn-sm mb-3">
-        Add Inhouse Part
-      </Link>
-      <Link to="/showFormAddOutPart" className="btn btn-primary btn-sm mb-3">
-        Add Outsourced Part
-      </Link>
-
-      {/* Car Parts Table */}
-      <table className="table table-bordered table-striped">
-        <thead className="thead-dark">
+      <table className="table">
+        <thead>
           <tr>
             <th>Name</th>
             <th>Price</th>
@@ -76,27 +85,15 @@ const Mainscreen: FC = () => {
             <th>Action</th>
           </tr>
         </thead>
-
         <tbody>
-        
-          {parts.map((part, index) => (
-            <tr key={index}>
+          {parts.map((part) => (
+            <tr key={part.id}>
               <td>{part.name}</td>
-              <td>{part.price}</td>
+              <td>${part.price.toFixed(2)}</td>
               <td>{part.inv}</td>
               <td>
-                <Link
-                  to={`/showPartFormForUpdate/${index}`}
-                  className="btn btn-primary btn-sm mb-3"
-                >
-                  Update
-                </Link>
-                <Link
-                  to={`/deletepart/${index}`}
-                  className="btn btn-primary btn-sm mb-3"
-                >
-                  Delete
-                </Link>
+                <button onClick={() => handleUpdatePart(part.id)}>Update</button>
+                <button onClick={() => handleDeletePart(part.id)}>Delete</button>
               </td>
             </tr>
           ))}
@@ -104,37 +101,8 @@ const Mainscreen: FC = () => {
       </table>
 
       <h2>Car Products</h2>
-
-      {/* Search form for products */}
-      <form action="/mainscreen">
-        Filter:{" "}
-        <input
-          type="text"
-          name="productkeyword"
-          id="productkeyword"
-          size={50}
-          required
-        />
-        &nbsp;
-        <input type="submit" value="Search" />
-        &nbsp;
-        <input
-          type="button"
-          value="Clear"
-          id="btnClearProduct"
-          onClick={() => window.location.reload()}
-        />
-      </form>
-      <br />
-
-      {/* Add Product Button */}
-      <Link to="/showFormAddProduct" className="btn btn-primary btn-sm mb-3">
-        Add Product
-      </Link>
-
-      {/* Car Products Table */}
-      <table className="table table-bordered table-striped">
-        <thead className="thead-dark">
+      <table className="table">
+        <thead>
           <tr>
             <th>Name</th>
             <th>Price</th>
@@ -142,32 +110,16 @@ const Mainscreen: FC = () => {
             <th>Action</th>
           </tr>
         </thead>
-
         <tbody>
-          {products.map((product, index) => (
-            <tr key={index}>
+          {products.map((product) => (
+            <tr key={product.id}>
               <td>{product.name}</td>
-              <td>{product.price}</td>
+              <td>${product.price.toFixed(2)}</td>
               <td>{product.inv}</td>
               <td>
-                <Link
-                  to={`/buyProduct/${index}`}
-                  className="btn btn-primary btn-sm mb-3"
-                >
-                  Buy Now
-                </Link>
-                <Link
-                  to={`/showProductFormForUpdate/${index}`}
-                  className="btn btn-primary btn-sm mb-3"
-                >
-                  Update
-                </Link>
-                <Link
-                  to={`/deleteproduct/${index}`}
-                  className="btn btn-primary btn-sm mb-3"
-                >
-                  Delete
-                </Link>
+                <button onClick={() => handleBuyProduct(product.id)}>Buy Now</button>
+                <button onClick={() => handleUpdateProduct(product.id)}>Update</button>
+                <button onClick={() => handleDeleteProduct(product.id)}>Delete</button>
               </td>
             </tr>
           ))}
