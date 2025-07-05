@@ -29,64 +29,75 @@ const OutsourcedPartForm: React.FC = () => {
   };
 
   return (
-    <div className="outsourced-part-form">
-      <h1>Outsourced Part Detail</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="hidden"
-          name="id"
-          value={outsourcedPart.id}
-          onChange={handleChange}
-        />
-        
-        <div>
-          <label htmlFor="name">Part Name:</label>
+    <div className="w-full">
+      <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow mt-8 border border-gray-700 text-center">
+        <h1 className="text-2xl font-bold mb-4 text-blue-600">Outsourced Part Detail</h1>
+        <form onSubmit={handleSubmit}>
           <input
-            type="text"
-            id="name"
-            name="name"
-            value={outsourcedPart.name}
+            type="hidden"
+            name="id"
+            value={outsourcedPart.id}
             onChange={handleChange}
-            placeholder="Part Name"
-            required
           />
-        </div>
 
-        <div>
-          <label htmlFor="price">Price:</label>
-          <input
-            type="number"
-            id="price"
-            name="price"
-            value={outsourcedPart.price}
-            onChange={handleChange}
-            placeholder="Price"
-            required
-          />
-        </div>
+          <div className="mb-4">
+            <label htmlFor="name" className="block mb-1 font-semibold">Part Name:</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value={outsourcedPart.name}
+              onChange={handleChange}
+              placeholder="Part Name"
+              className="form-control mb-1 col-4 border border-gray-300 rounded px-2 py-1"
+              required
+            />
+          </div>
 
-        <div>
-          <label htmlFor="companyName">Company Name:</label>
-          <input
-            type="text"
-            id="companyName"
-            name="companyName"
-            value={outsourcedPart.companyName}
-            onChange={handleChange}
-            placeholder="Company Name"
-            className="form-control mb-4 col-4"
-            required
-          />
-        </div>
+          <div className="mb-4">
+            <label htmlFor="price" className="block mb-1 font-semibold">Price:</label>
+            <input
+              type="number"
+              id="price"
+              name="price"
+              value={outsourcedPart.price}
+              onChange={handleChange}
+              placeholder="Price"
+              className="form-control mb-1 col-4 border border-gray-300 rounded px-2 py-1"
+              required
+            />
+          </div>
 
-        <button type="submit">Save Outsourced Part</button>
-      </form>
+          <div className="mb-4">
+            <label htmlFor="companyName" className="block mb-1 font-semibold">Company Name:</label>
+            <input
+              type="text"
+              id="companyName"
+              name="companyName"
+              value={outsourcedPart.companyName}
+              onChange={handleChange}
+              placeholder="Company Name"
+              className="form-control mb-1 col-4 border border-gray-300 rounded px-2 py-1"
+              required
+            />
+          </div>
 
-      <a href="http://localhost:8080/">Link to Main Screen</a>
+          <div>
+            <button
+              type="submit"
+              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 cursor-pointer"
+            >
+              Save Outsourced Part
+            </button>
+          </div>
+        </form>
+
+        <a href="http://localhost:5173" className="block mt-6 text-blue-600 hover:underline">
+          Link to Main Screen
+        </a>
+      </div>
     </div>
   );
 };
 
 export default OutsourcedPartForm;
-// This code defines a React functional component for an Outsourced Part Form. It uses TypeScript for type safety and includes state management with hooks. The form captures the part's name, price, and company name, and handles form submission by logging the data to the console. The component also includes a link back to the main screen.
-

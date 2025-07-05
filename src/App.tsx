@@ -38,6 +38,7 @@ const App: React.FC = () => {
     if (field === 'maxInventory') setMaxInventory(value);
   };
 
+  
   useEffect(() => {
     fetch('http://localhost:8080/api/mainscreen') // Updated to match the backend
       .then((response) => response.json())

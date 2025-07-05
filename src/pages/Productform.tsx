@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom'; 
 
 interface Product {
   id: string;
@@ -14,7 +15,7 @@ function ProductForm() {
     price: '',
     inv: '',
   });
-  const [errorMessage, setErrorMessage] = useState<string>(''); // explicit put string type
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -26,119 +27,146 @@ function ProductForm() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Form validation: Check if any field is empty
+
     if (!product.name || !product.price || !product.inv) {
       setErrorMessage('All fields are required!');
       return;
     }
 
-    // Reset error message if everything is filled
     setErrorMessage('');
-
-    // Add form submission logic here
-    // Example: Submit the form data to an API or process it further
     console.log('Form submitted:', product);
   };
+
+  {/* redirect/navigation to mainscreen */}
+        <Link to="/" className="block mt-4 mb-8 text-blue-600 hover:underline text-center">
+          Back to Main Screen
+        </Link>
   
-
   return (
-    <div>
-      <h1>Product Detail</h1>
-      <form onSubmit={handleSubmit}>
-        <input type="hidden" name="id" value={product.id} />
+    <div className="w-full min-h-screen bg-gray-50 py-8">
+      <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow border border-gray-300">
+        
+        <Link to="/" className="block mb-6 text-blue-600 hover:underline text-center">
+          Back to Main Screen
+        </Link>
+        <h1 className="text-2xl font-bold mb-6 text-blue-600 text-center">Product Detail</h1>
+        <form onSubmit={handleSubmit} className="mb-8">
+          <input type="hidden" name="id" value={product.id} />
 
-        <input
-          type="text"
-          name="name"
-          placeholder="Name"
-          value={product.name}
-          onChange={handleChange}
-          className="form-control mb-4 col-4"
-        />
-
-        <input
-          type="text"
-          name="price"
-          placeholder="Price"
-          value={product.price}
-          onChange={handleChange}
-          className="form-control mb-4 col-4"
-        />
-
-        <input
-          type="text"
-          name="inv"
-          placeholder="Inventory"
-          value={product.inv}
-          onChange={handleChange}
-          className="form-control mb-4 col-4"
-        />
-
-        {errorMessage && (
-          <div>
-            <p className="error-message">{errorMessage}</p>
+          <div className="mb-4 text-left">
+            <label htmlFor="name" className="block mb-1 font-semibold">Name:</label>
+            <input
+              type="text"
+              name="name"
+              id="name"
+              placeholder="Name"
+              value={product.name}
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded px-3 py-2"
+            />
           </div>
-        )}
 
-        <input type="submit" value="Submit" />
-      </form>
+          <div className="mb-4 text-left">
+            <label htmlFor="price" className="block mb-1 font-semibold">Price:</label>
+            <input
+              type="text"
+              name="price"
+              id="price"
+              placeholder="Price"
+              value={product.price}
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded px-3 py-2"
+            />
+          </div>
 
-      <h2>Available Parts</h2>
-      <table className="table table-bordered table-striped">
-        <thead className="thead-dark">
-          <tr>
-            <th>Name</th>
-            <th>Price</th>
-            <th>Inventory</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {/* Map through available parts and render rows */}
-          {/* Example: */}
-          {/* {availParts.map((part) => (
-            <tr key={part.id}>
-              <td>{part.name}</td>
-              <td>{part.price}</td>
-              <td>{part.inv}</td>
-              <td>
-                <a href={`/associatepart/${part.id}`} className="btn btn-primary btn-sm mb-3">
-                  Add
-                </a>
-              </td>
-            </tr>
-          ))} */}
-        </tbody>
-      </table>
+          <div className="mb-4 text-left">
+            <label htmlFor="inv" className="block mb-1 font-semibold">Inventory:</label>
+            <input
+              type="text"
+              name="inv"
+              id="inv"
+              placeholder="Inventory"
+              value={product.inv}
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded px-3 py-2"
+            />
+          </div>
 
-      <h2>Associated Parts</h2>
-      <table className="table table-bordered table-striped">
-        <thead className="thead-dark">
-          <tr>
-            <th>Name</th>
-            <th>Price</th>
-            <th>Inventory</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {/* Map through associated parts and render rows */}
-          {/* Example: */}
-          {/* {assParts.map((part) => (
-            <tr key={part.id}>
-              <td>{part.name}</td>
-              <td>{part.price}</td>
-              <td>{part.inv}</td>
-              <td>
-                <a href={`/removepart/${part.id}`} className="btn btn-primary btn-sm mb-3">
-                  Remove
-                </a>
-              </td>
-            </tr>
-          ))} */}
-        </tbody>
-      </table>
+          {errorMessage && (
+            <div className="mb-4">
+              <p className="text-red-600 text-sm">{errorMessage}</p>
+            </div>
+          )}
+
+          <div className="text-center">
+            <input
+              type="submit"
+              value="Submit"
+              className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 cursor-pointer"
+            />
+          </div>
+        </form>
+
+        <h2 className="text-xl font-semibold mb-2 text-gray-700">Available Parts</h2>
+        <div className="overflow-x-auto mb-8">
+          <table className="min-w-full table-auto border border-gray-300 rounded">
+            <thead className="bg-gray-200">
+              <tr>
+                <th className="px-4 py-2">Name</th>
+                <th className="px-4 py-2">Price</th>
+                <th className="px-4 py-2">Inventory</th>
+                <th className="px-4 py-2">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {/* Map through available parts and render rows */}
+              {/* Example: */}
+              {/* {availParts.map((part) => (
+                <tr key={part.id}>
+                  <td className="px-4 py-2">{part.name}</td>
+                  <td className="px-4 py-2">{part.price}</td>
+                  <td className="px-4 py-2">{part.inv}</td>
+                  <td className="px-4 py-2">
+                    <a href={`/associatepart/${part.id}`} className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700">
+                      Add
+                    </a>
+                  </td>
+                </tr>
+              ))} */}
+            </tbody>
+          </table>
+        </div>
+
+        <h2 className="text-xl font-semibold mb-2 text-gray-700">Associated Parts</h2>
+        <div className="overflow-x-auto">
+          <table className="min-w-full table-auto border border-gray-300 rounded">
+            <thead className="bg-gray-200">
+              <tr>
+                <th className="px-4 py-2">Name</th>
+                <th className="px-4 py-2">Price</th>
+                <th className="px-4 py-2">Inventory</th>
+                <th className="px-4 py-2">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {/* Map through associated parts and render rows */}
+              {/* Example: */}
+              {/* {assParts.map((part) => (
+                <tr key={part.id}>
+                  <td className="px-4 py-2">{part.name}</td>
+                  <td className="px-4 py-2">{part.price}</td>
+                  <td className="px-4 py-2">{part.inv}</td>
+                  <td className="px-4 py-2">
+                    <a href={`/removepart/${part.id}`} className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-700">
+                      Remove
+                    </a>
+                  </td>
+                </tr>
+              ))} */}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   );
 }
