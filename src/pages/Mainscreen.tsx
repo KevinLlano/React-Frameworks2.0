@@ -1,4 +1,5 @@
 import React, { FC, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 
 interface Item {
@@ -27,6 +28,7 @@ const initialProducts: Item[] = [
 ];
 
 const Mainscreen: FC = () => {
+  const navigate = useNavigate();
   const [parts, setParts] = useState<Item[]>([]);
   const [products, setProducts] = useState<Item[]>([]);
   const [partKeyword, setPartKeyword] = useState("");
@@ -59,8 +61,7 @@ const Mainscreen: FC = () => {
 
 
   const handleUpdatePart = (id: number) => {
-    // Navigate to the update form with the part id in the URL
-    window.location.href = `/showPartFormForUpdate/${id}`;
+    navigate(`/showPartFormForUpdate/${id}`);
   };
 
   const handleDeletePart = (id: number) => {
@@ -74,7 +75,7 @@ const Mainscreen: FC = () => {
   };
 
   const handleUpdateProduct = (id: number) => {
-    window.location.href = `/showProductFormForUpdate/${id}`;
+    navigate(`/showProductFormForUpdate/${id}`);
   };
 
   const handleDeleteProduct = (id: number) => {
@@ -100,12 +101,12 @@ const Mainscreen: FC = () => {
     <div className=" px-4 py-10 bg-gradient-to-br from-black via-blue-100 to-pink-100 min-h-screen">
       {/* Navigation */}
       <nav className="mb-8 flex justify-between items-center">
-        <a
-          href="/about"
+        <button
+          onClick={() => navigate("/about")}
           className="inline-block px-5 py-2 border-2 border-pink-500 text-pink-600 rounded-lg font-semibold hover:bg-pink-500 hover:text-white transition"
         >
           About Us
-        </a>
+        </button>
         <span className="text-2xl font-bold text-pink-700 drop-shadow">Kevin's Hot Wheels</span>
       </nav>
 
@@ -141,18 +142,18 @@ const Mainscreen: FC = () => {
         </form>
 
         <div className="mb-6 flex gap-2">
-          <a
-            href="/showFormAddInPart"
+          <button
+            onClick={() => navigate("/showFormAddInPart")}
             className="bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-600 transition text-sm font-semibold"
           >
             Add Inhouse Part
-          </a>
-          <a
-            href="/showFormAddOutPart"
+          </button>
+          <button
+            onClick={() => navigate("/showFormAddOutPart")}
             className="bg-pink-500 text-white px-4 py-2 rounded shadow hover:bg-pink-600 transition text-sm font-semibold"
           >
             Add Outsourced Part
-          </a>
+          </button>
         </div>
 
         {/* Parts Table */}
@@ -233,12 +234,12 @@ const Mainscreen: FC = () => {
         </form>
 
         <div className="mb-6">
-          <a
-            href="/showFormAddProduct"
+          <button
+            onClick={() => navigate("/showFormAddProduct")}
             className="bg-pink-500 text-white px-4 py-2 rounded shadow hover:bg-pink-600 transition text-sm font-semibold"
           >
             Add Product
-          </a>
+          </button>
         </div>
 
         {/* Products Table */}

@@ -1,4 +1,5 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface OutsourcedPart {
   id: string;
@@ -9,6 +10,7 @@ interface OutsourcedPart {
 }
 
 const OutsourcedPartForm: React.FC = () => {
+  const navigate = useNavigate();
   const [outsourcedPart, setOutsourcedPart] = useState<OutsourcedPart>({
     id: '',
     companyName: '',
@@ -36,16 +38,19 @@ const OutsourcedPartForm: React.FC = () => {
     const partsArray = storedParts ? JSON.parse(storedParts) : [];
     const updatedParts = [...partsArray, newPart];
     localStorage.setItem('parts', JSON.stringify(updatedParts));
-    window.location.href = "/";
+    navigate("/");
   };
 
   return (
     <div className="w-full">
       <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow mt-8 text-center ">
         <div className="flex flex-col items-center">
-          <a href="/" className="text-blue-500 underline mb-4">
+          <button 
+            onClick={() => navigate("/")}
+            className="text-blue-500 underline mb-4"
+          >
             &larr; Return to Main Screen
-          </a>
+          </button>
           <h1 className="text-2xl font-bold mb-4 text-blue-600">Outsourced Part Detail</h1>
           <form onSubmit={handleSubmit} className="w-80">
             <input
@@ -68,7 +73,7 @@ const OutsourcedPartForm: React.FC = () => {
             </div>
             <div className="mb-4">
               <input
-                type="number"
+                type="text"
                 id="price"
                 name="price"
                 value={outsourcedPart.price}
@@ -80,7 +85,7 @@ const OutsourcedPartForm: React.FC = () => {
             </div>
             <div className="mb-4">
               <input
-                type="number"
+                type="text"
                 id="inv"
                 name="inv"
                 value={outsourcedPart.inv}
@@ -104,9 +109,9 @@ const OutsourcedPartForm: React.FC = () => {
             </div>
             <button
               type="submit"
-              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 cursor-pointer"
+              className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition"
             >
-              Save Outsourced Part
+              Submit
             </button>
           </form>
         </div>
