@@ -4,7 +4,6 @@ import { Routes, Route } from 'react-router-dom';
 import About from './pages/About';
 import ConfirmationAddPart from './pages/Confirmationaddpart';
 import ConfirmationAssocPart from './pages/Confirmationassocpart';
-import ConfirmationBuyProduct from './pages/Confirmationbuyproduct';
 import ConfirmationDeletePart from './pages/Confirmationdeletepart';
 import ConfirmationDeleteProduct from './pages/Confirmationdeleteproduct';
 import ErrorBuyProduct from './pages/Errorbuyproduct';
@@ -56,7 +55,6 @@ const App: React.FC = () => {
         <Route path="/about" element={<About />} />
         <Route path="/confirmationaddpart" element={<ConfirmationAddPart />} />
         <Route path="/confirmationassocpart" element={<ConfirmationAssocPart />} />
-        <Route path="/confirmationbuyproduct" element={<ConfirmationBuyProduct />} />
         <Route path="/confirmationdeletepart" element={<ConfirmationDeletePart />} />
         <Route path="/confirmationdeleteproduct" element={<ConfirmationDeleteProduct />} />
         <Route path="/purchasefailure" element={<ErrorBuyProduct />} />
@@ -83,6 +81,8 @@ const App: React.FC = () => {
 
         <Route path="/showFormAddProduct" element={<ProductForm />} />
         <Route path="/saveproductscreen" element={<SaveProductScreen />} />
+        <Route path="/showPartFormForUpdate/:id" element={<InhousePartForm />} />
+        <Route path="/showProductFormForUpdate/:id" element={<ProductForm />} />
       </Routes>
     </div>
   );

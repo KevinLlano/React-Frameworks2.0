@@ -1,41 +1,135 @@
-import React, { FormEvent } from 'react';
+import React, { FormEvent, useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 
-const InhousePartForm: React.FC = () => {
+interface Part {
+  id: number;
+  name: string;
+  price: number;
+  inv: number;
+  partId?: number;
+}
+
+interface InhousePartFormProps {
+  onAddPart?: (newPart: Part) => void;
+}
+
+const InhousePartForm: React.FC<InhousePartFormProps> = ({ onAddPart }) => {
+  const { id } = useParams<{ id: string }>();
+  const initialFormData: Part = {
+    id: 0,
+    name: "",
+    price: 0,
+    inv: 0,
+    partId: undefined,
+  };
+  const [formData, setFormData] = useState<Part>(initialFormData);
+
+  useEffect(() => {
+    if (id) {
+      // Editing: load part from localStorage by id
+      const storedParts = localStorage.getItem("parts");
+      if (storedParts) {
+        const partsArray = JSON.parse(storedParts);
+        const found = partsArray.find((p: Part) => String(p.id) === id);
+        if (found) setFormData(found);
+      }
+    }
+  }, [id]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]:
+        name === "price"
+          ? parseFloat(value) || 0
+          : name === "inv" || name === "partId"
+          ? value
+            ? Number(value)
+            : 0
+          : value,
+    }));
+  };
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log("Form submitted");
+    let newPart = { ...formData };
+    if (!id) {
+      // New part: assign new id
+      newPart.id = Date.now();
+    }
+    const storedParts = localStorage.getItem("parts");
+    let partsArray = storedParts ? JSON.parse(storedParts) : [];
+    if (id) {
+      // Update existing part
+      partsArray = partsArray.map((p: Part) => (String(p.id) === id ? newPart : p));
+    } else {
+      // Add new part
+      partsArray = [...partsArray, newPart];
+    }
+    localStorage.setItem("parts", JSON.stringify(partsArray));
+    if (onAddPart) onAddPart(newPart);
+    window.location.href = "/";
   };
 
   return (
-    <div className="w-full">
-      <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow mt-8 border border-gray-700 text-center">
-        <h1 className="text-2xl font-bold mb-4 text-blue-600">Inhouse Part Detail</h1>
-
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label htmlFor="partId" className="block mb-1 font-semibold">Part ID:</label>
-            <input type="number" id="partId" name="partId" readOnly className="form-control mb-2 col-4 border border-gray-300 rounded px-2 py-1" />
-          </div>
-
-          <div className="mb-4">
-            <input type="text" name="name" placeholder="Name" className="form-control mb-1 col-4 border border-gray-300 rounded px-2 py-1" />
-            <p className="error text-red-600 text-sm">Name is required</p>
-          </div>
-
-          <div className="mb-4">
-            <input type="text" name="price" placeholder="Price" className="form-control mb-1 col-4 border border-gray-300 rounded px-2 py-1" />
-            <p className="error text-red-600 text-sm">Price is required</p>
-          </div>
-
-          <div>
-            <input type="submit" value="Submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 cursor-pointer" />
-          </div>
-        </form>
-
-        <a href="http://localhost:5173/" className="block mt-6 text-blue-600 hover:underline">Link to Main Screen</a>
-      </div>
+    <div className="flex flex-col items-center">
+      <a href="/" className="text-blue-500 underline mb-4 mt-14">
+        &larr; Return to Main Screen
+      </a>
+      <h1 className="text-2xl font-bold mb-6">Inhouse Part Detail</h1>
+      <form onSubmit={handleSubmit} className="w-80">
+        <input type="hidden" name="id" value={formData.id} />
+        <div className="mb-4">
+          <input
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            placeholder="Name"
+            className="w-full border rounded px-3 py-2"
+          />
+        </div>
+        <div className="mb-4">
+          <input
+            type="number"
+            step="0.01"
+            name="price"
+            value={formData.price === 0 ? "" : formData.price.toString()}
+            onChange={handleChange}
+            placeholder="Price"
+            className="w-full border rounded px-3 py-2"
+          />
+        </div>
+        <div className="mb-4">
+          <input
+            type="text"
+            name="inv"
+            value={formData.inv || ""}
+            onChange={handleChange}
+            placeholder="Inventory"
+            className="w-full border rounded px-3 py-2"
+          />
+        </div>
+        <div className="mb-4">
+          <input
+            type="text"
+            name="partId"
+            value={formData.partId || ""}
+            onChange={handleChange}
+            placeholder="Part ID"
+            className="w-full border rounded px-3 py-2"
+          />
+        </div>
+        <button
+          type="submit"
+          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+        >
+          Submit
+        </button>
+      </form>
     </div>
   );
-}
+};
 
 export default InhousePartForm;

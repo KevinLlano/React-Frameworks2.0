@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom'; 
+import React, { useState, useEffect } from 'react';
+import { Link, useParams } from 'react-router-dom'; 
 
 interface Product {
   id: string;
@@ -9,13 +9,25 @@ interface Product {
 }
 
 function ProductForm() {
-  const [product, setProduct] = useState({
+  const { id } = useParams<{ id: string }>();
+  const [product, setProduct] = useState<Product>({
     id: '',
     name: '',
     price: '',
     inv: '',
   });
   const [errorMessage, setErrorMessage] = useState<string>('');
+
+  useEffect(() => {
+    if (id) {
+      const storedProducts = localStorage.getItem('products');
+      if (storedProducts) {
+        const productsArray = JSON.parse(storedProducts);
+        const found = productsArray.find((p: Product) => String(p.id) === id);
+        if (found) setProduct(found);
+      }
+    }
+  }, [id]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -34,7 +46,21 @@ function ProductForm() {
     }
 
     setErrorMessage('');
-    console.log('Form submitted:', product);
+
+    let newProduct = { ...product };
+    if (!id) {
+      newProduct.id = Date.now().toString();
+    }
+    let productsArray = JSON.parse(localStorage.getItem('products') || '[]');
+    if (id) {
+      // Update existing product
+      productsArray = productsArray.map((p: Product) => (String(p.id) === id ? newProduct : p));
+    } else {
+      // Add new product
+      productsArray.push(newProduct);
+    }
+    localStorage.setItem('products', JSON.stringify(productsArray));
+    window.location.href = "/";
   };
 
   {/* redirect/navigation to mainscreen */}
@@ -43,18 +69,17 @@ function ProductForm() {
         </Link>
   
   return (
-    <div className="w-full min-h-screen bg-gray-50 py-8">
+    <div className="w-full min-h-screen bg-gray-50 py-8 ">
       <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow border border-gray-300">
         
         <Link to="/" className="block mb-6 text-blue-600 hover:underline text-center">
           Back to Main Screen
         </Link>
         <h1 className="text-2xl font-bold mb-6 text-blue-600 text-center">Product Detail</h1>
-        <form onSubmit={handleSubmit} className="mb-8">
+        <form onSubmit={handleSubmit} className="w-80 mx-auto flex flex-col items-center mb-8">
           <input type="hidden" name="id" value={product.id} />
 
           <div className="mb-4 text-left">
-            <label htmlFor="name" className="block mb-1 font-semibold">Name:</label>
             <input
               type="text"
               name="name"
@@ -62,12 +87,11 @@ function ProductForm() {
               placeholder="Name"
               value={product.name}
               onChange={handleChange}
-              className="w-full border border-gray-300 rounded px-3 py-2"
+              className="w-full border rounded px-3 py-2"
             />
           </div>
 
           <div className="mb-4 text-left">
-            <label htmlFor="price" className="block mb-1 font-semibold">Price:</label>
             <input
               type="text"
               name="price"
@@ -75,12 +99,11 @@ function ProductForm() {
               placeholder="Price"
               value={product.price}
               onChange={handleChange}
-              className="w-full border border-gray-300 rounded px-3 py-2"
+              className="w-full border rounded px-3 py-2"
             />
           </div>
 
           <div className="mb-4 text-left">
-            <label htmlFor="inv" className="block mb-1 font-semibold">Inventory:</label>
             <input
               type="text"
               name="inv"
@@ -88,7 +111,7 @@ function ProductForm() {
               placeholder="Inventory"
               value={product.inv}
               onChange={handleChange}
-              className="w-full border border-gray-300 rounded px-3 py-2"
+              className="w-full border rounded px-3 py-2"
             />
           </div>
 

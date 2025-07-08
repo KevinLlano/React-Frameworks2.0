@@ -3,7 +3,7 @@ import React from 'react';
 const About: React.FC = () => {
   return (
     <div className="w-full">
-      <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow mt-8 border border-gray-700 text-center">
+      <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow mt-8 text-center">
         <nav className="mb-4">
           <a href="/" className="text-2xl text-blue-600 hover:underline font-semibold">Home</a>
         </nav>

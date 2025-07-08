@@ -11,5 +11,4 @@ const ErrorBuyProduct: React.FC = () => {
 }
 
 export default ErrorBuyProduct;
-// This component is responsible for displaying an error message when a purchase fails.
-// It provides a link to return to the main screen.
+

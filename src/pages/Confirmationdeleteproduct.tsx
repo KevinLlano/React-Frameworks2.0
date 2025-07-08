@@ -14,5 +14,3 @@ const ConfirmationDeleteProduct: React.FC = () => {
 }
 
 export default ConfirmationDeleteProduct;
-// This component is responsible for confirming the deletion of a product.
-// It uses the useEffect hook to redirect the user to the main screen after the component mounts.

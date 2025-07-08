@@ -15,5 +15,3 @@ const ConfirmationDeletePart: React.FC = () => {
 }
 
 export default ConfirmationDeletePart;
-// This component will redirect to the main screen after a part is deleted.
-// It uses the useEffect hook to perform the redirection when the component mounts.

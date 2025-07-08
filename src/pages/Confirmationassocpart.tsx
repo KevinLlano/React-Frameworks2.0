@@ -15,5 +15,4 @@ const ConfirmationAssocPart: React.FC = () => {
 }
 
 export default ConfirmationAssocPart;
-// This component is responsible for confirming the association of a part with a product.
-// It uses the useEffect hook to redirect the user to the main screen after the component mounts.
+

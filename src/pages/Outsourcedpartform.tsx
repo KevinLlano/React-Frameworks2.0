@@ -5,6 +5,7 @@ interface OutsourcedPart {
   companyName: string;
   name: string;
   price: string;
+  inv: string;
 }
 
 const OutsourcedPartForm: React.FC = () => {
@@ -12,7 +13,8 @@ const OutsourcedPartForm: React.FC = () => {
     id: '',
     companyName: '',
     name: '',
-    price: ''
+    price: '',
+    inv: ''
   });
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
@@ -25,76 +27,89 @@ const OutsourcedPartForm: React.FC = () => {
 
   const handleSubmit = (e: FormEvent): void => {
     e.preventDefault();
-    console.log(outsourcedPart);
+    const newPart = {
+      ...outsourcedPart,
+      id: outsourcedPart.id || Date.now().toString(),
+      partType: 'Outsourced',
+    };
+    const storedParts = localStorage.getItem('parts');
+    const partsArray = storedParts ? JSON.parse(storedParts) : [];
+    const updatedParts = [...partsArray, newPart];
+    localStorage.setItem('parts', JSON.stringify(updatedParts));
+    window.location.href = "/";
   };
 
   return (
     <div className="w-full">
-      <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow mt-8 border border-gray-700 text-center">
-        <h1 className="text-2xl font-bold mb-4 text-blue-600">Outsourced Part Detail</h1>
-        <form onSubmit={handleSubmit}>
-          <input
-            type="hidden"
-            name="id"
-            value={outsourcedPart.id}
-            onChange={handleChange}
-          />
-
-          <div className="mb-4">
-            <label htmlFor="name" className="block mb-1 font-semibold">Part Name:</label>
+      <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow mt-8 text-center ">
+        <div className="flex flex-col items-center">
+          <a href="/" className="text-blue-500 underline mb-4">
+            &larr; Return to Main Screen
+          </a>
+          <h1 className="text-2xl font-bold mb-4 text-blue-600">Outsourced Part Detail</h1>
+          <form onSubmit={handleSubmit} className="w-80">
             <input
-              type="text"
-              id="name"
-              name="name"
-              value={outsourcedPart.name}
+              type="hidden"
+              name="id"
+              value={outsourcedPart.id}
               onChange={handleChange}
-              placeholder="Part Name"
-              className="form-control mb-1 col-4 border border-gray-300 rounded px-2 py-1"
-              required
             />
-          </div>
-
-          <div className="mb-4">
-            <label htmlFor="price" className="block mb-1 font-semibold">Price:</label>
-            <input
-              type="number"
-              id="price"
-              name="price"
-              value={outsourcedPart.price}
-              onChange={handleChange}
-              placeholder="Price"
-              className="form-control mb-1 col-4 border border-gray-300 rounded px-2 py-1"
-              required
-            />
-          </div>
-
-          <div className="mb-4">
-            <label htmlFor="companyName" className="block mb-1 font-semibold">Company Name:</label>
-            <input
-              type="text"
-              id="companyName"
-              name="companyName"
-              value={outsourcedPart.companyName}
-              onChange={handleChange}
-              placeholder="Company Name"
-              className="form-control mb-1 col-4 border border-gray-300 rounded px-2 py-1"
-              required
-            />
-          </div>
-
-          <div>
+            <div className="mb-4">
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={outsourcedPart.name}
+                onChange={handleChange}
+                placeholder="Part Name"
+                className="w-full border rounded px-3 py-2"
+                required
+              />
+            </div>
+            <div className="mb-4">
+              <input
+                type="number"
+                id="price"
+                name="price"
+                value={outsourcedPart.price}
+                onChange={handleChange}
+                placeholder="Price"
+                className="w-full border rounded px-3 py-2"
+                required
+              />
+            </div>
+            <div className="mb-4">
+              <input
+                type="number"
+                id="inv"
+                name="inv"
+                value={outsourcedPart.inv}
+                onChange={handleChange}
+                placeholder="Inventory"
+                className="w-full border rounded px-3 py-2"
+                required
+              />
+            </div>
+            <div className="mb-4">
+              <input
+                type="text"
+                id="companyName"
+                name="companyName"
+                value={outsourcedPart.companyName}
+                onChange={handleChange}
+                placeholder="Company Name"
+                className="w-full border rounded px-3 py-2"
+                required
+              />
+            </div>
             <button
               type="submit"
               className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 cursor-pointer"
             >
               Save Outsourced Part
             </button>
-          </div>
-        </form>
-
-        <a href="http://localhost:5173" className="block mt-6 text-blue-600 hover:underline">
-          Link to Main Screen
-        </a>
+          </form>
+        </div>
       </div>
     </div>
   );
