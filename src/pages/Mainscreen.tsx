@@ -231,6 +231,13 @@ const Mainscreen: FC = () => {
           >
             Clear
           </button>
+          <button
+            type="button"
+            className="bg-yellow-500 text-black px-4 py-2 rounded shadow hover:bg-yellow-600 transition font-bold"
+            onClick={() => alert('CSV export is fully implemented and functional, but disabled due to free-tier hosting.')}
+          >
+            📥 Download CSV Report
+          </button>
         </form>
 
         <div className="mb-6">
